@@ -17,10 +17,6 @@ type ModelQuery struct {
 	SomeDate  time.Time `query:"some_date"`
 }
 
-type ModelQueryInvalid struct {
-	id string `query:"id"`
-}
-
 type DecodeSuiteTest struct {
 	suite.Suite
 }
@@ -38,8 +34,7 @@ func (s *DecodeSuiteTest) TestDecodeQueryParams() {
 	values.Add("some_date", "2024-02-01T10:54:12Z")
 
 	s.T().Run("should decode query params", func(t *testing.T) {
-		model := New[ModelQuery]()
-		response := model.DecodeQueryParams(values)
+		response := DecodeQueryParams[ModelQuery](values)
 		assert.Equal(t, "new_id", response.ID)
 		assert.Equal(t, int32(1), response.SomeInt)
 		assert.Equal(t, float32(3.1314), response.SomeFloat)
@@ -57,8 +52,7 @@ func (s *DecodeSuiteTest) TestDecodeQueryParamsWithCustomTag() {
 	values.Add("some_date", "2024-02-01T10:54:12Z")
 
 	s.T().Run("should decode query params", func(t *testing.T) {
-		model := New[ModelQuery]()
-		response := model.DecodeQueryParamsWithCustomTag(values, "query")
+		response := DecodeQueryParamsWithCustomTag[ModelQuery](values, "query")
 		assert.Equal(t, "new_id", response.ID)
 		assert.Equal(t, int32(1), response.SomeInt)
 		assert.Equal(t, float32(3.1314), response.SomeFloat)
