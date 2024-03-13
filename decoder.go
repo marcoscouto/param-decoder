@@ -9,8 +9,6 @@ import (
 
 const queryTag = "query"
 
-//go:generate mockery --name Decoder --output=mock --outpkg=mock --filename=decoder.go --with-expecter=true
-
 type Decoder[T any] interface {
 	DecodeQueryParams(values url.Values) T
 	DecodeQueryParamsWithCustomTag(values url.Values, customTag string) T
