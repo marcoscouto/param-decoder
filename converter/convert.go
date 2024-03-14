@@ -4,13 +4,15 @@ import (
 	"errors"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
 const (
-	dateLayout = "2006-01-02T15:04:05Z"
-	base       = 10
-	bitSize    = 64
+	dateLayout     = "2006-01-02T15:04:05Z"
+	base           = 10
+	bitSize        = 64
+	sliceSplitChar = ","
 )
 
 var (
@@ -34,6 +36,7 @@ func init() {
 	resolvers[reflect.Bool] = resolveBool
 	resolvers[reflect.Struct] = resolveStruct
 	resolvers[reflect.String] = resolveString
+	resolvers[reflect.Slice] = resolveSlice
 }
 
 func Resolve(field reflect.Value, value string) error {
@@ -103,6 +106,23 @@ var resolveStruct = func(field reflect.Value, value string) error {
 		if field.CanSet() {
 			field.Set(reflect.ValueOf(t))
 		}
+	}
+	return nil
+}
+
+var resolveSlice = func(field reflect.Value, value string) error {
+	values := strings.Split(value, sliceSplitChar)
+	if len(values) != 0 {
+		t := field.Type().Elem()
+		s := reflect.MakeSlice(reflect.SliceOf(t), 0, len(values))
+		for _, v := range values {
+			f := reflect.New(t).Elem()
+			if err := Resolve(f, v); err != nil {
+				return err
+			}
+			s = reflect.Append(s, f)
+		}
+		field.Set(s)
 	}
 	return nil
 }
