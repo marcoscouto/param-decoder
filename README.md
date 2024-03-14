@@ -1,4 +1,4 @@
-![Go](https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white)
+![Go](https://img.shields.io/badge/1.21-100000?style=flat&logo=go&logoColor=FFFFFF&labelColor=76E1FE&color=FFFFFF)
 
 # Param Decoder
 
