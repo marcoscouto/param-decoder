@@ -1,4 +1,4 @@
-package converter
+package decoders
 
 import (
 	"errors"
@@ -16,44 +16,44 @@ const (
 )
 
 var (
-	resolvers  map[reflect.Kind]func(field reflect.Value, value string) error
+	decoders   map[reflect.Kind]func(field reflect.Value, value string) error
 	intTypes   = []reflect.Kind{reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64}
 	uintTypes  = []reflect.Kind{reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64}
 	floatTypes = []reflect.Kind{reflect.Float32, reflect.Float64}
 )
 
 func init() {
-	resolvers = make(map[reflect.Kind]func(field reflect.Value, value string) error)
+	decoders = make(map[reflect.Kind]func(field reflect.Value, value string) error)
 	for _, v := range intTypes {
-		resolvers[v] = resolveInt
+		decoders[v] = decodeInt
 	}
 	for _, v := range uintTypes {
-		resolvers[v] = resolveUInt
+		decoders[v] = decodeUInt
 	}
 	for _, v := range floatTypes {
-		resolvers[v] = resolveFloat
+		decoders[v] = decodeFloat
 	}
-	resolvers[reflect.Bool] = resolveBool
-	resolvers[reflect.Struct] = resolveStruct
-	resolvers[reflect.String] = resolveString
-	resolvers[reflect.Slice] = resolveSlice
+	decoders[reflect.Bool] = decodeBool
+	decoders[reflect.Struct] = decodeStruct
+	decoders[reflect.String] = decodeString
+	decoders[reflect.Slice] = decodeSlice
 }
 
-func Resolve(field reflect.Value, value string) error {
-	if f, ok := resolvers[field.Kind()]; ok {
+func DecodeField(field reflect.Value, value string) error {
+	if f, ok := decoders[field.Kind()]; ok {
 		return f(field, value)
 	}
 	return errors.ErrUnsupported
 }
 
-var resolveString = func(field reflect.Value, value string) error {
+func decodeString(field reflect.Value, value string) error {
 	if field.CanSet() {
 		field.SetString(value)
 	}
 	return nil
 }
 
-var resolveInt = func(field reflect.Value, value string) error {
+func decodeInt(field reflect.Value, value string) error {
 	intValue, err := strconv.ParseInt(value, base, bitSize)
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ var resolveInt = func(field reflect.Value, value string) error {
 	return nil
 }
 
-var resolveUInt = func(field reflect.Value, value string) error {
+func decodeUInt(field reflect.Value, value string) error {
 	uintValue, err := strconv.ParseUint(value, base, bitSize)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ var resolveUInt = func(field reflect.Value, value string) error {
 	return nil
 }
 
-var resolveFloat = func(field reflect.Value, value string) error {
+func decodeFloat(field reflect.Value, value string) error {
 	floatValue, err := strconv.ParseFloat(value, bitSize)
 	if err != nil {
 		return err
@@ -86,7 +86,7 @@ var resolveFloat = func(field reflect.Value, value string) error {
 	return nil
 }
 
-var resolveBool = func(field reflect.Value, value string) error {
+func decodeBool(field reflect.Value, value string) error {
 	boolValue, err := strconv.ParseBool(value)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ var resolveBool = func(field reflect.Value, value string) error {
 	return nil
 }
 
-var resolveStruct = func(field reflect.Value, value string) error {
+func decodeStruct(field reflect.Value, value string) error {
 	if field.Type() == reflect.TypeOf(time.Time{}) {
 		t, err := time.Parse(dateLayout, value)
 		if err != nil {
@@ -110,14 +110,14 @@ var resolveStruct = func(field reflect.Value, value string) error {
 	return nil
 }
 
-var resolveSlice = func(field reflect.Value, value string) error {
+func decodeSlice(field reflect.Value, value string) error {
 	values := strings.Split(value, sliceSplitChar)
 	if len(values) != 0 {
 		t := field.Type().Elem()
 		s := reflect.MakeSlice(reflect.SliceOf(t), 0, len(values))
 		for _, v := range values {
 			f := reflect.New(t).Elem()
-			if err := Resolve(f, v); err != nil {
+			if err := DecodeField(f, v); err != nil {
 				return err
 			}
 			s = reflect.Append(s, f)

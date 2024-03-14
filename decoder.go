@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/marcoscouto/param-decoder/converter"
+	"github.com/marcoscouto/param-decoder/decoders"
 )
 
 const queryTag = "query"
@@ -21,7 +21,7 @@ func DecodeQueryParamsWithCustomTag[T any](values url.Values, customTag string) 
 		param := targetValue.Type().Field(i).Tag.Get(customTag)
 		value := values.Get(param)
 		if len(value) != 0 {
-			converter.Resolve(field, value)
+			decoders.DecodeField(field, value)
 		}
 	}
 	return t
