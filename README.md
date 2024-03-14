@@ -24,6 +24,10 @@ type Params struct {
 	Age       int32     `query:"age"`
 	Balance   float32   `query:"balance"`
 	Verified  bool      `query:"verified"`
+	Names     []string  `query:"names"`
+	Ages      []int32   `query:"ages"`
+	Balances  []float32 `query:"balances"`
+	Verifieds []bool    `query:"verifieds"`
 }
 ```
 
@@ -52,8 +56,7 @@ The method will return a `Params` struct with the values from query. If the valu
 `uint, uint8, uint16, uint32, uint64`
 - float
 `float32, float64`
-
-
+- slices [string, int, uint, float, bool]
 
 ## Full Example
 
@@ -94,10 +97,14 @@ type Params struct {
 	Age       int32     `query:"age"`
 	Balance   float32   `query:"balance"`
 	Verified  bool      `query:"verified"`
+	Names     []string  `query:"names"`
+	Ages      []int32   `query:"ages"`
+	Balances  []float32 `query:"balances"`
+	Verifieds []bool    `query:"verifieds"`
 }
 ```
 
 cURL
 ```
-curl --location 'http://localhost:3000?name=some_name&id=some_id&age=99&created_at=2024-01-05T12%3A13%3A14Z&balance=10.11&verified=true'
+curl --location 'http://localhost:3000?name=some_name&id=some_id&age=99&created_at=2024-01-05T12%3A13%3A14Z&balance=10.11&verified=true&ages=1%2C2%2C3&balances=1.1%2C2.2%2C3.3&verifieds=true%2Cfalse%2Ctrue&names=a%2Cb%2Cc'
 ```

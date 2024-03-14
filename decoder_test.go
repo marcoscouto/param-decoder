@@ -19,6 +19,7 @@ type ModelQuery struct {
 	FloatSlice  []float32 `query:"float_slice"`
 	StringSlice []string  `query:"string_slice"`
 	BoolSlice   []bool    `query:"bool_slice"`
+	UIntSlice   []uint32  `query:"uint_slice"`
 }
 
 type DecodeSuiteTest struct {
@@ -51,7 +52,7 @@ func buildUrlValues() url.Values {
 	values.Add("float_slice", "1.1,2.2,3.3")
 	values.Add("string_slice", "a,b,c")
 	values.Add("bool_slice", "true,false,true")
-	values.Add("bool_slice", "true,false,true")
+	values.Add("uint_slice", "1,2,3")
 	return values
 }
 
@@ -65,4 +66,5 @@ func assertResult(t *testing.T, response ModelQuery) {
 	assert.ElementsMatch(t, []float32{1.1, 2.2, 3.3}, response.FloatSlice)
 	assert.ElementsMatch(t, []string{"a", "b", "c"}, response.StringSlice)
 	assert.ElementsMatch(t, []bool{true, false, true}, response.BoolSlice)
+	assert.ElementsMatch(t, []uint32{1, 2, 3}, response.UIntSlice)
 }
