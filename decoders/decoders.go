@@ -16,14 +16,16 @@ const (
 )
 
 var (
-	decoders   map[reflect.Kind]func(field reflect.Value, value string) error
+	decoders   map[reflect.Kind]decodeField
 	intTypes   = []reflect.Kind{reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64}
 	uintTypes  = []reflect.Kind{reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64}
 	floatTypes = []reflect.Kind{reflect.Float32, reflect.Float64}
 )
 
+type decodeField func(field reflect.Value, value string) error
+
 func init() {
-	decoders = make(map[reflect.Kind]func(field reflect.Value, value string) error)
+	decoders = make(map[reflect.Kind]decodeField)
 	for _, v := range intTypes {
 		decoders[v] = decodeInt
 	}
