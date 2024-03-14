@@ -1,8 +1,6 @@
 # Param Decoder
 
-![Go](https://img.shields.io/badge/1.21-100000?style=flat&logo=go&logoColor=FFFFFF&labelColor=76E1FE&color=FFFFFF)
-
-![Version](https://img.shields.io/badge/v0.0.2-100000?style=flat&logo=git&logoColor=FFFFFF&labelColor=76E1FE&color=FFFFFF)
+![Go](https://img.shields.io/badge/1.21-100000?style=flat&logo=go&logoColor=FFFFFF&labelColor=76E1FE&color=FFFFFF) ![Version](https://img.shields.io/badge/v0.0.2-100000?style=flat&logo=git&logoColor=FFFFFF&labelColor=76E1FE&color=FFFFFF)
 
 This lib is built to get request query params and deserialize in structs in the easiest way.
 
