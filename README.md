@@ -69,7 +69,7 @@ The method will return a `Params` struct with the values from query. If the valu
 
 ## Full Example
 
-main.go
+**main.go**
 
 ```
 package main
@@ -113,7 +113,7 @@ type Params struct {
 }
 ```
 
-cURL
+**cURL**
 ```
 curl --location 'http://localhost:3000?name=some_name&id=some_id&age=99&created_at=2024-01-05T12%3A13%3A14Z&balance=10.11&verified=true&ages=1%2C2%2C3&balances=1.1%2C2.2%2C3.3&verifieds=true%2Cfalse%2Ctrue&names=a%2Cb%2Cc'
 ```
