@@ -8,9 +8,18 @@ This lib is built to get request query params and deserialize in structs in the 
 
 Add at your project with the command
 
+Latest version
+
 ```
 go get github.com/marcoscouto/param-decoder
 ```
+
+Specific version
+
+```
+go get github.com/marcoscouto/param-decoder@v0.0.3
+```
+
 
 ## How to use
 
