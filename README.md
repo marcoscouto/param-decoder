@@ -56,7 +56,7 @@ The method will return a `Params` struct with the values from query. If the valu
 `uint, uint8, uint16, uint32, uint64`
 - float
 `float32, float64`
-- slices [string, int, uint, float, bool]
+- slices `string, int, uint, float, bool`
 
 ## Full Example
 
